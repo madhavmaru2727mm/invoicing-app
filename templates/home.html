@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Store</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>ABC Store</h1>
+    
+    <div class="invoice">
+        <label>Product Name:</label>
+        <input type="text" id="product-name" list="product-list" autocomplete="off">
+        <datalist id="product-list"></datalist>
+
+        <label>Quantity:</label>
+        <input type="number" id="quantity">
+        
+        <button id="add-product">Add to Invoice</button>
+
+        <h3>Invoice</h3>
+        <ul id="invoice-list"></ul>
+        
+        <button id="print-invoice">Print Invoice</button>
+    </div>
+
+    <h3>Add New Product</h3>
+    <input type="text" id="new-product-name" placeholder="Product Name">
+    <input type="number" id="new-product-price" placeholder="Selling Price">
+    <button id="save-product">Save Product</button>
+    <p id="product-message"></p>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
