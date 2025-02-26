@@ -5,9 +5,9 @@ app = Flask(__name__)
 # Permanent product storage (Simulating database)
 products = {
     "L40": {"name": "Lace40", "price": 40},
-    "L45": {"name": "Lace45", "price": 45}
+    "L45": {"name": "Lace45", "price": 45},
     "L50": {"name": "Lace50", "price": 50},
-    "L45": {"name": "Lace60", "price": 60}
+    "L60": {"name": "Lace60", "price": 60}
 }
 
 @app.route('/')
