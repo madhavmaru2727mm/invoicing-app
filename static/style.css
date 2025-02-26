@@ -1,16 +1,80 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background-color: #F8F8F8; /* Very light gray */
+    color: #333; /* Dark gray for text */
+    margin: 0;
+    padding: 20px;
 }
 
+/* Invoice Section */
 .invoice {
     margin: 20px auto;
-    width: 300px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
+    width: 350px;
+    padding: 15px;
+    border: 2px solid #008080; /* Teal border */
+    background-color: #FFFFFF; /* White background */
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Buttons */
 button {
     margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    background-color: #008080; /* Teal */
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #00CCCC; /* Lighter cyan */
+}
+
+/* Input Fields */
+input {
+    width: 90%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #008080; /* Teal border */
+    border-radius: 4px;
+    outline: none;
+    text-align: center;
+}
+
+input:focus {
+    border-color: #00CCCC; /* Cyan */
+    box-shadow: 0 0 5px rgba(0, 204, 204, 0.5);
+}
+
+/* Invoice List */
+#invoice-list {
+    list-style: none;
+    padding: 0;
+}
+
+#invoice-list li {
+    padding: 8px;
+    background-color: #E0FFFF; /* Very light cyan */
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+/* Success/Error Messages */
+#product-message {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.success {
+    color: #008080; /* Teal */
+}
+
+.error {
+    color: red;
 }

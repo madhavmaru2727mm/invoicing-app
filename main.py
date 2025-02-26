@@ -17,8 +17,15 @@ def home():
 @app.route('/search', methods=['GET'])
 def search_product():
     query = request.args.get('q', '').strip().lower()
-    matching_products = {code: data for code, data in products.items() if query in data["name"].lower() or query in code.lower()}
+    
+    matching_products = {
+        code.upper(): {"name": data["name"], "price": data["price"]}
+        for code, data in products.items()
+        if query in data["name"].lower() or query in code.lower()
+    }
+
     return jsonify(matching_products)
+
 
 @app.route('/add_product', methods=['POST'])
 def add_product():

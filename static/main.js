@@ -50,16 +50,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add product to invoice
     addProductBtn.addEventListener("click", function () {
-        let productText = productInput.value.trim();
+        let productText = productInput.value.trim().toUpperCase();  // Convert to uppercase
         let quantity = parseInt(quantityInput.value);
-
+    
         if (!productText || isNaN(quantity) || quantity <= 0) {
             alert("Please enter a valid product and quantity.");
             return;
         }
-
-        let [productCode] = productText.split(" - ");
-
+    
+        let productCode = productText.split(" - ")[0].toUpperCase();  // Ensure code is uppercase
+    
         fetch(`/search?q=${productCode}`)
             .then(response => response.json())
             .then(data => {
@@ -69,50 +69,86 @@ document.addEventListener("DOMContentLoaded", function () {
                     let item = document.createElement("li");
                     item.textContent = `${data[productCode].name} - ${quantity} x ₹${price} = ₹${total}`;
                     invoiceList.appendChild(item);
-
-                    totalAmount += total; // Update total amount
-
+    
+                    totalAmount += total;
+    
                     // Clear fields
                     productInput.value = "";
                     quantityInput.value = "";
                     productInput.focus();
                 } else {
-                    alert("Product not found.");
+                    alert("Product not found. Try refreshing the page.");
                 }
             });
     });
-
+    
     // Save new product
-    saveProductBtn.addEventListener("click", function () {
-        let code = newProductCode.value.trim().toUpperCase();
-        let name = newProductName.value.trim();
-        let price = parseInt(newProductPrice.value);
+   saveProductBtn.addEventListener("click", function () {
+    let code = newProductCode.value.trim().toUpperCase();
+    let name = newProductName.value.trim();
+    let price = parseInt(newProductPrice.value);
 
-        if (!code || !name || isNaN(price) || price <= 0) {
-            alert("Enter valid product details.");
-            return;
+    if (!code || !name || isNaN(price) || price <= 0) {
+        alert("Enter valid product details.");
+        return;
+    }
+
+    fetch("/add_product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, name, price })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            productMessage.textContent = "Product added";
+            productMessage.style.color = "green";
+
+            // Refresh product list IMMEDIATELY
+            setTimeout(loadProducts, 500);  // Ensure dropdown updates
+
+            newProductCode.value = "";
+            newProductName.value = "";
+            newProductPrice.value = "";
+        } else {
+            productMessage.textContent = "Failed to add product";
+            productMessage.style.color = "red";
         }
-
-        fetch("/add_product", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ code, name, price })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                productMessage.textContent = "Product added";
-                productMessage.style.color = "green";
-                loadProducts();  // Refresh product list
-                newProductCode.value = "";
-                newProductName.value = "";
-                newProductPrice.value = "";
-            } else {
-                productMessage.textContent = "Failed to add product";
-                productMessage.style.color = "red";
-            }
-        });
     });
+});
+saveProductBtn.addEventListener("click", function () {
+    let code = newProductCode.value.trim().toUpperCase();
+    let name = newProductName.value.trim();
+    let price = parseInt(newProductPrice.value);
+
+    if (!code || !name || isNaN(price) || price <= 0) {
+        alert("Enter valid product details.");
+        return;
+    }
+
+    fetch("/add_product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, name, price })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            productMessage.textContent = "Product added";
+            productMessage.style.color = "green";
+
+            // Refresh product list IMMEDIATELY
+            setTimeout(loadProducts, 500);  // Ensure dropdown updates
+
+            newProductCode.value = "";
+            newProductName.value = "";
+            newProductPrice.value = "";
+        } else {
+            productMessage.textContent = "Failed to add product";
+            productMessage.style.color = "red";
+        }
+    });
+});
 
     // Print invoice (ONLY invoice details, no input fields)
     printInvoiceBtn.addEventListener("click", function () {
