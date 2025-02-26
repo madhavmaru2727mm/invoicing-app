@@ -10,8 +10,8 @@
     <h1>ABC Store</h1>
     
     <div class="invoice">
-        <label>Product Name:</label>
-        <input type="text" id="product-name" list="product-list" autocomplete="off">
+        <label>Product Code or Name:</label>
+        <input type="text" id="product-input" list="product-list" autocomplete="off">
         <datalist id="product-list"></datalist>
 
         <label>Quantity:</label>
@@ -26,6 +26,7 @@
     </div>
 
     <h3>Add New Product</h3>
+    <input type="text" id="new-product-code" placeholder="Product Code">
     <input type="text" id="new-product-name" placeholder="Product Name">
     <input type="number" id="new-product-price" placeholder="Selling Price">
     <button id="save-product">Save Product</button>

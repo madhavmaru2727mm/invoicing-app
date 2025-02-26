@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let productInput = document.getElementById("product-name");
+    let productInput = document.getElementById("product-input");
     let quantityInput = document.getElementById("quantity");
     let productList = document.getElementById("product-list");
     let invoiceList = document.getElementById("invoice-list");
     let addProductBtn = document.getElementById("add-product");
     let printInvoiceBtn = document.getElementById("print-invoice");
     let saveProductBtn = document.getElementById("save-product");
+    let newProductCode = document.getElementById("new-product-code");
     let newProductName = document.getElementById("new-product-name");
     let newProductPrice = document.getElementById("new-product-price");
     let productMessage = document.getElementById("product-message");
@@ -18,9 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 productList.innerHTML = "";
-                Object.keys(data).forEach(product => {
+                Object.entries(data).forEach(([code, product]) => {
                     let option = document.createElement("option");
-                    option.value = product;
+                    option.value = `${code} - ${product.name}`;
                     productList.appendChild(option);
                 });
             });
@@ -49,22 +50,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add product to invoice
     addProductBtn.addEventListener("click", function () {
-        let product = productInput.value.trim();
+        let productText = productInput.value.trim();
         let quantity = parseInt(quantityInput.value);
 
-        if (!product || isNaN(quantity) || quantity <= 0) {
+        if (!productText || isNaN(quantity) || quantity <= 0) {
             alert("Please enter a valid product and quantity.");
             return;
         }
 
-        fetch(`/search?q=${product}`)
+        let [productCode] = productText.split(" - ");
+
+        fetch(`/search?q=${productCode}`)
             .then(response => response.json())
             .then(data => {
-                if (data[product]) {
-                    let price = data[product];
+                if (data[productCode]) {
+                    let price = data[productCode].price;
                     let total = price * quantity;
                     let item = document.createElement("li");
-                    item.textContent = `${product} - ${quantity} x ₹${price} = ₹${total}`;
+                    item.textContent = `${data[productCode].name} - ${quantity} x ₹${price} = ₹${total}`;
                     invoiceList.appendChild(item);
 
                     totalAmount += total; // Update total amount
@@ -81,10 +84,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Save new product
     saveProductBtn.addEventListener("click", function () {
+        let code = newProductCode.value.trim().toUpperCase();
         let name = newProductName.value.trim();
         let price = parseInt(newProductPrice.value);
 
-        if (!name || isNaN(price) || price <= 0) {
+        if (!code || !name || isNaN(price) || price <= 0) {
             alert("Enter valid product details.");
             return;
         }
@@ -92,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch("/add_product", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, price })
+            body: JSON.stringify({ code, name, price })
         })
         .then(response => response.json())
         .then(data => {
@@ -100,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 productMessage.textContent = "Product added";
                 productMessage.style.color = "green";
                 loadProducts();  // Refresh product list
+                newProductCode.value = "";
                 newProductName.value = "";
                 newProductPrice.value = "";
             } else {
