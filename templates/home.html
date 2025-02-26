@@ -7,30 +7,35 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>ABC Store</h1>
-    
-    <div class="invoice">
-        <label>Product Code or Name:</label>
-        <input type="text" id="product-input" list="product-list" autocomplete="off">
-        <datalist id="product-list"></datalist>
-
-        <label>Quantity:</label>
-        <input type="number" id="quantity">
+    <div class="container">
+        <h1>ABC Store</h1>
         
-        <button id="add-product">Add to Invoice</button>
+        <div class="invoice-section">
+            <h3>Invoice</h3>
+            <label>Product Code or Name:</label>
+            <input type="text" id="product-input" list="product-list" autocomplete="off">
+            <datalist id="product-list"></datalist>
 
-        <h3>Invoice</h3>
-        <ul id="invoice-list"></ul>
-        
-        <button id="print-invoice">Print Invoice</button>
+            <label>Quantity:</label>
+            <input type="number" id="quantity">
+            
+            <button id="add-product">Add to Invoice</button>
+
+            <ul id="invoice-list"></ul>
+            <h2 id="total-amount">Total: ₹0</h2>
+
+            <button id="print-invoice">Print Invoice</button>
+        </div>
+
+        <div class="product-section">
+            <h3>Add New Product</h3>
+            <input type="text" id="new-product-code" placeholder="Product Code">
+            <input type="text" id="new-product-name" placeholder="Product Name">
+            <input type="number" id="new-product-price" placeholder="Selling Price">
+            <button id="save-product">Save Product</button>
+            <p id="product-message"></p>
+        </div>
     </div>
-
-    <h3>Add New Product</h3>
-    <input type="text" id="new-product-code" placeholder="Product Code">
-    <input type="text" id="new-product-name" placeholder="Product Name">
-    <input type="number" id="new-product-price" placeholder="Selling Price">
-    <button id="save-product">Save Product</button>
-    <p id="product-message"></p>
 
     <script src="/static/main.js"></script>
 </body>

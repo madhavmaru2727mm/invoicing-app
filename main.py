@@ -26,7 +26,6 @@ def search_product():
 
     return jsonify(matching_products)
 
-
 @app.route('/add_product', methods=['POST'])
 def add_product():
     data = request.json
@@ -45,4 +44,3 @@ def add_product():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-

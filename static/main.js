@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let newProductName = document.getElementById("new-product-name");
     let newProductPrice = document.getElementById("new-product-price");
     let productMessage = document.getElementById("product-message");
-    
-    let totalAmount = 0; // Store total amount
+    let totalAmountText = document.getElementById("total-amount");
 
-    // Load products in dropdown
+    let totalAmount = 0;
+
     function loadProducts() {
         fetch("/search?q=")
             .then(response => response.json())
@@ -29,37 +29,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadProducts();
 
-    // Handle product selection and move to quantity input
-    productInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            quantityInput.focus();
-        }
-    });
-
-    // Handle quantity input and move back to product name
-    quantityInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            addProductBtn.click();
-        } else if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            productInput.focus();
-        }
-    });
-
-    // Add product to invoice
     addProductBtn.addEventListener("click", function () {
-        let productText = productInput.value.trim().toUpperCase();  // Convert to uppercase
+        let productText = productInput.value.trim().toUpperCase();
         let quantity = parseInt(quantityInput.value);
-    
+
         if (!productText || isNaN(quantity) || quantity <= 0) {
-            alert("Please enter a valid product and quantity.");
+            alert("Enter valid product & quantity.");
             return;
         }
-    
-        let productCode = productText.split(" - ")[0].toUpperCase();  // Ensure code is uppercase
-    
+
+        let productCode = productText.split(" - ")[0].toUpperCase();
+
         fetch(`/search?q=${productCode}`)
             .then(response => response.json())
             .then(data => {
@@ -69,94 +49,52 @@ document.addEventListener("DOMContentLoaded", function () {
                     let item = document.createElement("li");
                     item.textContent = `${data[productCode].name} - ${quantity} x ₹${price} = ₹${total}`;
                     invoiceList.appendChild(item);
-    
+
                     totalAmount += total;
-    
-                    // Clear fields
+                    totalAmountText.textContent = `Total: ₹${totalAmount}`;
+
                     productInput.value = "";
                     quantityInput.value = "";
                     productInput.focus();
                 } else {
-                    alert("Product not found. Try refreshing the page.");
+                    alert("Product not found.");
                 }
             });
     });
-    
-    // Save new product
-   saveProductBtn.addEventListener("click", function () {
-    let code = newProductCode.value.trim().toUpperCase();
-    let name = newProductName.value.trim();
-    let price = parseInt(newProductPrice.value);
 
-    if (!code || !name || isNaN(price) || price <= 0) {
-        alert("Enter valid product details.");
-        return;
-    }
+    saveProductBtn.addEventListener("click", function () {
+        let code = newProductCode.value.trim().toUpperCase();
+        let name = newProductName.value.trim();
+        let price = parseInt(newProductPrice.value);
 
-    fetch("/add_product", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, name, price })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            productMessage.textContent = "Product added";
-            productMessage.style.color = "green";
-
-            // Refresh product list IMMEDIATELY
-            setTimeout(loadProducts, 500);  // Ensure dropdown updates
-
-            newProductCode.value = "";
-            newProductName.value = "";
-            newProductPrice.value = "";
-        } else {
-            productMessage.textContent = "Failed to add product";
-            productMessage.style.color = "red";
+        if (!code || !name || isNaN(price) || price <= 0) {
+            alert("Enter valid product details.");
+            return;
         }
+
+        fetch("/add_product", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code, name, price })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                productMessage.textContent = "Product added successfully!";
+                productMessage.style.color = "green";
+                loadProducts();
+                newProductCode.value = "";
+                newProductName.value = "";
+                newProductPrice.value = "";
+            } else {
+                productMessage.textContent = "Error: " + data.message;
+                productMessage.style.color = "red";
+            }
+        });
     });
-});
-saveProductBtn.addEventListener("click", function () {
-    let code = newProductCode.value.trim().toUpperCase();
-    let name = newProductName.value.trim();
-    let price = parseInt(newProductPrice.value);
 
-    if (!code || !name || isNaN(price) || price <= 0) {
-        alert("Enter valid product details.");
-        return;
-    }
-
-    fetch("/add_product", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, name, price })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            productMessage.textContent = "Product added";
-            productMessage.style.color = "green";
-
-            // Refresh product list IMMEDIATELY
-            setTimeout(loadProducts, 500);  // Ensure dropdown updates
-
-            newProductCode.value = "";
-            newProductName.value = "";
-            newProductPrice.value = "";
-        } else {
-            productMessage.textContent = "Failed to add product";
-            productMessage.style.color = "red";
-        }
-    });
-});
-
-    // Print invoice (ONLY invoice details, no input fields)
     printInvoiceBtn.addEventListener("click", function () {
-        let invoiceContent = `<h1>ABC Store</h1>`;
-        invoiceContent += `<h3>Invoice Details</h3>`;
-        invoiceContent += `<ul>${invoiceList.innerHTML}</ul>`;
-        invoiceContent += `<h2>Total Amount: ₹${totalAmount}</h2>`; // Show total
-
+        let invoiceContent = `<h1>ABC Store</h1><h3>Invoice</h3><ul>${invoiceList.innerHTML}</ul><h2>${totalAmountText.textContent}</h2>`;
         let newWindow = window.open("", "", "width=600,height=400");
         newWindow.document.write(invoiceContent);
         newWindow.document.close();
