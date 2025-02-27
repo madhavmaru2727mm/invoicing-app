@@ -1,7 +1,34 @@
 {
-    "T.V.": 25000,
     "12": {
-        "name": "12",
-        "price": 12
+        "name": "Lace120",
+        "price": 120
+    },
+    "L100": {
+        "name": "Lace100",
+        "price": 100
+    },
+    "L300": {
+        "name": "lace300",
+        "price": 300
+    },
+    "L40": {
+        "name": "Lace40",
+        "price": 40
+    },
+    "L45": {
+        "name": "Lace45",
+        "price": 45
+    },
+    "L50": {
+        "name": "Lace50",
+        "price": 50
+    },
+    "L60": {
+        "name": "Lace60",
+        "price": 60
+    },
+    "L55": {
+        "name": "Lace55",
+        "price": 55
     }
 }
