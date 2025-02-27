@@ -42,5 +42,29 @@ def add_product():
     products[code] = {"name": name, "price": price}  # Save permanently
     return jsonify({"status": "success", "message": "Product added"}), 200
 
+@app.route('/edit_product', methods=['POST'])
+def edit_product():
+    data = request.json
+    code = data.get("code").strip().upper()
+    new_name = data.get("name").strip()
+    new_price = data.get("price")
+
+    if code in products:
+        products[code]["name"] = new_name
+        products[code]["price"] = new_price
+        return jsonify({"status": "success", "message": "Product updated successfully"}), 200
+
+    return jsonify({"status": "error", "message": "Product not found"}), 404
+
+@app.route('/delete_product', methods=['DELETE'])
+def delete_product():
+    code = request.args.get("code").strip().upper()
+
+    if code in products:
+        del products[code]
+        return jsonify({"status": "success", "message": "Product deleted successfully"}), 200
+
+    return jsonify({"status": "error", "message": "Product not found"}), 404
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

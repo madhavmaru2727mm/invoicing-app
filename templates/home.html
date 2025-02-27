@@ -10,6 +10,7 @@
     <div class="container">
         <h1>ABC Store</h1>
         
+        <!-- Invoice Section -->
         <div class="invoice-section">
             <h3>Invoice</h3>
             <input type="text" id="product-input" list="product-list" autocomplete="off" placeholder="Product Code or Name">
@@ -22,6 +23,7 @@
             <button id="print-invoice">Print Invoice</button>
         </div>
 
+        <!-- Add New Product Section -->
         <div class="product-section">
             <h3>Add New Product</h3>
             <input type="text" id="new-product-code" placeholder="Product Code">
@@ -29,6 +31,15 @@
             <input type="number" id="new-product-price" placeholder="Selling Price">
             <button id="save-product">Save Product</button>
             <p id="product-message"></p>
+        </div>
+
+        <!-- Edit/Delete Product Section -->
+        <div class="product-section">
+            <h3>Edit/Delete Product</h3>
+            <input type="text" id="search-product" list="edit-list" autocomplete="off" placeholder="Search Product">
+            <datalist id="edit-list"></datalist>
+            <button id="edit-product">Edit</button>
+            <button id="delete-product">Delete</button>
         </div>
     </div>
 

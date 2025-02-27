@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let productList = document.getElementById("product-list");
     let invoiceList = document.getElementById("invoice-list");
     let totalAmountText = document.getElementById("total-amount");
+    let editList = document.getElementById("edit-list");
 
     let totalAmount = 0;
 
@@ -12,10 +13,15 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 productList.innerHTML = "";
+                editList.innerHTML = "";
                 Object.entries(data).forEach(([code, product]) => {
                     let option = document.createElement("option");
                     option.value = `${code} - ${product.name}`;
                     productList.appendChild(option);
+
+                    let editOption = document.createElement("option");
+                    editOption.value = `${code} - ${product.name}`;
+                    editList.appendChild(editOption);
                 });
             });
     }
@@ -92,8 +98,49 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    document.getElementById("edit-product").addEventListener("click", function () {
+        let selectedText = document.getElementById("search-product").value.trim();
+        let productCode = selectedText.split(" - ")[0].toUpperCase();
+
+        let newName = prompt("Enter new product name:");
+        let newPrice = prompt("Enter new price:");
+
+        if (newName && newPrice) {
+            fetch("/edit_product", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code: productCode, name: newName, price: parseInt(newPrice) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") loadProducts();
+            });
+        }
+    });
+
+    document.getElementById("delete-product").addEventListener("click", function () {
+        let selectedText = document.getElementById("search-product").value.trim();
+        let productCode = selectedText.split(" - ")[0].toUpperCase();
+
+        if (confirm(`Are you sure you want to delete ${selectedText}?`)) {
+            fetch(`/delete_product?code=${productCode}`, { method: "DELETE" })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") loadProducts();
+            });
+        }
+    });
+
     document.getElementById("print-invoice").addEventListener("click", function () {
-        let invoiceContent = `<h1>ABC Store</h1><h3>Invoice</h3><ul>${invoiceList.innerHTML}</ul><h2>${totalAmountText.textContent}</h2>`;
+        let invoiceContent = `
+            <h1>ABC Store</h1>
+            <h3>Invoice</h3>
+            <ul>${invoiceList.innerHTML.replace(/<button class="remove-item">×<\/button>/g, '')}</ul>
+            <h2>${totalAmountText.textContent}</h2>
+        `;
+
         let newWindow = window.open("", "", "width=600,height=400");
         newWindow.document.write(invoiceContent);
         newWindow.document.close();
