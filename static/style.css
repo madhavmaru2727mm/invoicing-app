@@ -1,23 +1,97 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #F0F0F0;
-    color: #333;
+    background-color: #F0F0F0; /* entire page background */
+    color: #333; /* default text color */
+    margin: 0;
+    padding: 0;
 }
 
-.container {
-    width: 50%;
+.container { /* Main invoice box */
+    width: 90%;
+    max-width: 500px;
     margin: auto;
     padding: 20px;
     background: white;
     box-shadow: 0px 0px 10px gray;
+    border-radius: 10px;
 }
 
-button {
-    padding: 10px;
+h1, h3 {
+    margin-bottom: 10px; /* spacing below headings */
+}
+
+input, button { /* all text input fields & buttons */
+    width: 100%; /* spans across container */
+    padding: 10px; /* makes fields taller */
+    margin: 5px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button { /* all buttons e.g. Add Item */
     background-color: #008080;
     color: white;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
+}
+
+button:hover { /* change button to dark when hover */
+    background-color: #006666;
+}
+
+.remove-item { /* red X buttons remove item */
+    background: none;
+    border: none;
+    font-size: 17px;
+    color: red;
+    cursor: pointer;
+    padding: 2px;
+    width: 20px; /* Reduce width */
+    height: 20px; /* Reduce height */
+    text-align: center; /* Ensure it stays aligned */
+}
+
+.remove-item:hover {
+    color: darkred;
+}
+
+#invoice-list { /* Aligns invoice items to the left */
+    text-align: left;
+    padding: 0;
+}
+
+#invoice-list li { /* each item in the invoice list */
+    list-style: none;
+    padding: 10px;
+    background: #eee;
+    margin: 5px 0; /* Space between items */
+    border-radius: 5px; /* Rounded edges */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+@media (max-width: 480px) { /* when screen width is 480px or smaller */
+    .container { /* Invoice box */
+        width: 95%;
+        padding: 15px;
+    }
+
+    input, button { /* Smaller input & button text */
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #invoice-list li {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .remove-item {
+        font-size: 16px;
+        padding: 5px;
+    }
 }

@@ -3,13 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let quantityInput = document.getElementById("quantity");
     let productList = document.getElementById("product-list");
     let invoiceList = document.getElementById("invoice-list");
-    let addProductBtn = document.getElementById("add-product");
-    let printInvoiceBtn = document.getElementById("print-invoice");
-    let saveProductBtn = document.getElementById("save-product");
-    let newProductCode = document.getElementById("new-product-code");
-    let newProductName = document.getElementById("new-product-name");
-    let newProductPrice = document.getElementById("new-product-price");
-    let productMessage = document.getElementById("product-message");
     let totalAmountText = document.getElementById("total-amount");
 
     let totalAmount = 0;
@@ -29,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadProducts();
 
-    addProductBtn.addEventListener("click", function () {
+    document.getElementById("add-product").addEventListener("click", function () {
         let productText = productInput.value.trim().toUpperCase();
         let quantity = parseInt(quantityInput.value);
 
@@ -47,11 +40,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     let price = data[productCode].price;
                     let total = price * quantity;
                     let item = document.createElement("li");
-                    item.textContent = `${data[productCode].name} - ${quantity} x ₹${price} = ₹${total}`;
+                    item.classList.add("invoice-item");
+                    item.innerHTML = `
+                        <span>${data[productCode].name} - ${quantity} x ₹${price} = ₹${total}</span>
+                        <button class="remove-item">&times;</button>
+                    `;
                     invoiceList.appendChild(item);
 
                     totalAmount += total;
                     totalAmountText.textContent = `Total: ₹${totalAmount}`;
+
+                    item.querySelector(".remove-item").addEventListener("click", function () {
+                        invoiceList.removeChild(item);
+                        totalAmount -= total;
+                        totalAmountText.textContent = `Total: ₹${totalAmount}`;
+                    });
 
                     productInput.value = "";
                     quantityInput.value = "";
@@ -62,10 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
 
-    saveProductBtn.addEventListener("click", function () {
-        let code = newProductCode.value.trim().toUpperCase();
-        let name = newProductName.value.trim();
-        let price = parseInt(newProductPrice.value);
+    document.getElementById("save-product").addEventListener("click", function () {
+        let code = document.getElementById("new-product-code").value.trim().toUpperCase();
+        let name = document.getElementById("new-product-name").value.trim();
+        let price = parseInt(document.getElementById("new-product-price").value);
 
         if (!code || !name || isNaN(price) || price <= 0) {
             alert("Enter valid product details.");
@@ -79,21 +82,17 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
+            alert(data.message);
             if (data.status === "success") {
-                productMessage.textContent = "Product added successfully!";
-                productMessage.style.color = "green";
                 loadProducts();
-                newProductCode.value = "";
-                newProductName.value = "";
-                newProductPrice.value = "";
-            } else {
-                productMessage.textContent = "Error: " + data.message;
-                productMessage.style.color = "red";
+                document.getElementById("new-product-code").value = "";
+                document.getElementById("new-product-name").value = "";
+                document.getElementById("new-product-price").value = "";
             }
         });
     });
 
-    printInvoiceBtn.addEventListener("click", function () {
+    document.getElementById("print-invoice").addEventListener("click", function () {
         let invoiceContent = `<h1>ABC Store</h1><h3>Invoice</h3><ul>${invoiceList.innerHTML}</ul><h2>${totalAmountText.textContent}</h2>`;
         let newWindow = window.open("", "", "width=600,height=400");
         newWindow.document.write(invoiceContent);

@@ -12,18 +12,13 @@
         
         <div class="invoice-section">
             <h3>Invoice</h3>
-            <label>Product Code or Name:</label>
-            <input type="text" id="product-input" list="product-list" autocomplete="off">
+            <input type="text" id="product-input" list="product-list" autocomplete="off" placeholder="Product Code or Name">
             <datalist id="product-list"></datalist>
-
-            <label>Quantity:</label>
-            <input type="number" id="quantity">
-            
+            <input type="number" id="quantity" placeholder="Quantity">
             <button id="add-product">Add to Invoice</button>
 
             <ul id="invoice-list"></ul>
             <h2 id="total-amount">Total: ₹0</h2>
-
             <button id="print-invoice">Print Invoice</button>
         </div>
 
