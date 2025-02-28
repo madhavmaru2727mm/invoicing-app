@@ -1,4 +1,3 @@
-// Main.js - Just loadProducts function
 document.addEventListener("DOMContentLoaded", function () {
     let productInput = document.getElementById("product-input");
     let quantityInput = document.getElementById("quantity");
@@ -101,23 +100,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("edit-product").addEventListener("click", function () {
         let selectedText = document.getElementById("search-product").value.trim();
-        let productCode = selectedText.split(" - ")[0].toUpperCase();
-
-        let newName = prompt("Enter new product name:");
-        let newPrice = prompt("Enter new price:");
-
-        if (newName && newPrice) {
-            fetch("/edit_product", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ code: productCode, name: newName, price: parseInt(newPrice) })
-            })
+        let oldCode = selectedText.split(" - ")[0].toUpperCase();
+    
+        // Fetch current product details
+        fetch(`/search?q=${oldCode}`)
             .then(response => response.json())
             .then(data => {
-                alert(data.message);
-                if (data.status === "success") loadProducts();
+                let productData = data[oldCode];
+                if (!productData) {
+                    alert("Product not found.");
+                    return;
+                }
+    
+                let currentName = productData.name;
+                let currentPrice = productData.price;
+    
+                // Prompt user with current values
+                let newCode = prompt("Enter new product code:", oldCode);
+                if (newCode === null) return;
+                newCode = newCode.trim().toUpperCase();
+                if (!newCode) {
+                    alert("Product code cannot be empty.");
+                    return;
+                }
+    
+                let newName = prompt("Enter new product name:", currentName);
+                if (newName === null) return;
+    
+                let newPrice = prompt("Enter new price:", currentPrice);
+                if (newPrice === null) return;
+                newPrice = parseFloat(newPrice);
+    
+                if (!newName || isNaN(newPrice) || newPrice <= 0) {
+                    alert("Invalid name or price.");
+                    return;
+                }
+    
+                // Send update request
+                fetch("/edit_product", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        code: oldCode,
+                        new_code: newCode,
+                        name: newName, 
+                        price: newPrice 
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === "success") {
+                        loadProducts();
+                        document.getElementById("search-product").value = ""; // Clear search field
+                    }
+                });
             });
-        }
     });
 
     document.getElementById("delete-product").addEventListener("click", function () {

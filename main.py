@@ -1,4 +1,3 @@
-# Main.py - No changes needed in the backend
 import json
 from flask import Flask, render_template, request, jsonify
 
@@ -82,18 +81,32 @@ def add_product():
 def edit_product():
     global products
     data = request.json
-    code = data.get("code", "").strip().upper()
+    old_code = data.get("code", "").strip().upper()
+    new_code = data.get("new_code", "").strip().upper()
     new_name = data.get("name", "").strip()
     new_price = data.get("price")
 
-    if code in products:
-        products[code]["name"] = new_name
-        products[code]["price"] = new_price
-        save_products(products)
+    # Validation
+    if not old_code or not new_code or not new_name or not isinstance(new_price, (int, float)) or new_price <= 0:
+        return jsonify({"status": "error", "message": "Invalid input"}), 400
 
-        return jsonify({"status": "success", "message": "Product updated successfully"}), 200
+    if old_code not in products:
+        return jsonify({"status": "error", "message": "Product not found"}), 404
 
-    return jsonify({"status": "error", "message": "Product not found"}), 404
+    # Handle code change
+    if new_code != old_code:
+        if new_code in products:
+            return jsonify({"status": "error", "message": "New product code already exists"}), 400
+        # Create new entry and delete old
+        products[new_code] = {"name": new_name, "price": new_price}
+        del products[old_code]
+    else:
+        # Update existing entry
+        products[old_code]["name"] = new_name
+        products[old_code]["price"] = new_price
+
+    save_products(products)
+    return jsonify({"status": "success", "message": "Product updated successfully"}), 200
 
 @app.route('/delete_product', methods=['DELETE'])
 def delete_product():
