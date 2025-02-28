@@ -1,3 +1,4 @@
+# Main.py - No changes needed in the backend
 import json
 from flask import Flask, render_template, request, jsonify
 
@@ -29,7 +30,6 @@ def load_products():
             return products
     except (FileNotFoundError, json.JSONDecodeError):
         return DEFAULT_PRODUCTS
-
 
 # Save products to file
 def save_products(products):

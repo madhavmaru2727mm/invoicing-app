@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABC Store</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .panel {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -23,26 +33,88 @@
             <button id="print-invoice">Print Invoice</button>
         </div>
 
-        <!-- Add New Product Section -->
-        <div class="product-section">
+        <!-- Add New Product Button -->
+        <button id="show-add-product">Add New Product</button>
+
+        <!-- Add New Product Section (Panel) -->
+        <div id="add-product-panel" class="panel">
             <h3>Add New Product</h3>
             <input type="text" id="new-product-code" placeholder="Product Code">
             <input type="text" id="new-product-name" placeholder="Product Name">
             <input type="number" id="new-product-price" placeholder="Selling Price">
             <button id="save-product">Save Product</button>
             <p id="product-message"></p>
+            <button id="cancel-add-product">Cancel</button>  <!-- New Cancel Button -->
         </div>
 
-        <!-- Edit/Delete Product Section -->
-        <div class="product-section">
+         <!-- Edit/Delete Product Button -->
+        <button id="show-edit-product">Edit/Delete Product</button>
+
+        <!-- Edit/Delete Product Section (Panel) -->
+        <div id="edit-product-panel" class="panel">
             <h3>Edit/Delete Product</h3>
             <input type="text" id="search-product" list="edit-list" autocomplete="off" placeholder="Search Product">
             <datalist id="edit-list"></datalist>
             <button id="edit-product">Edit</button>
             <button id="delete-product">Delete</button>
+            <button id="cancel-edit-product">Cancel</button> <!-- New Cancel Button -->
         </div>
     </div>
 
     <script src="/static/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addProductButton = document.getElementById("show-add-product");
+            const addProductPanel = document.getElementById("add-product-panel");
+            const editProductButton = document.getElementById("show-edit-product");
+            const editProductPanel = document.getElementById("edit-product-panel");
+            const cancelAddProductButton = document.getElementById("cancel-add-product");  // Cancel button
+            const cancelEditProductButton = document.getElementById("cancel-edit-product"); // Cancel button
+            const saveProductButton = document.getElementById("save-product"); // Add new line here
+            const editButton = document.getElementById("edit-product"); // Add new line here
+            const deleteButton = document.getElementById("delete-product"); // Add new line here
+
+
+            addProductButton.addEventListener("click", function () {
+                addProductPanel.style.display = "block";
+                editProductPanel.style.display = "none"; // Ensure the other panel is hidden
+            });
+
+            editProductButton.addEventListener("click", function () {
+                editProductPanel.style.display = "block";
+                addProductPanel.style.display = "none"; // Ensure the other panel is hidden
+            });
+
+             // Cancel button functionality
+            cancelAddProductButton.addEventListener("click", function () {
+                addProductPanel.style.display = "none";
+            });
+
+            cancelEditProductButton.addEventListener("click", function () {
+                editProductPanel.style.display = "none";
+            });
+
+            // Event listener to hide the add product panel after saving
+            saveProductButton.addEventListener("click", function() {
+                // Add a delay to ensure the product is saved before hiding the panel
+                setTimeout(function() {
+                    addProductPanel.style.display = "none";
+                }, 500); // Adjust the delay as needed
+            });
+
+            // Event listeners to hide the edit product panel after edit/delete
+            editButton.addEventListener("click", function() {
+                setTimeout(function() {
+                    editProductPanel.style.display = "none";
+                }, 500); // Adjust the delay as needed
+            });
+
+            deleteButton.addEventListener("click", function() {
+                setTimeout(function() {
+                    editProductPanel.style.display = "none";
+                }, 500); // Adjust the delay as needed
+            });
+        });
+    </script>
 </body>
 </html>

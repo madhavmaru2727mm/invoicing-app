@@ -1,3 +1,4 @@
+// Main.js - Just loadProducts function
 document.addEventListener("DOMContentLoaded", function () {
     let productInput = document.getElementById("product-input");
     let quantityInput = document.getElementById("quantity");
@@ -9,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalAmount = 0;
 
     function loadProducts() {
-        fetch(`/search?q=&_=${new Date().getTime()}`, { cache: "no-store" }) // Prevent caching
+        fetch("/search?q=")
             .then(response => response.json())
             .then(data => {
                 productList.innerHTML = "";
@@ -23,8 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     editOption.value = `${code} - ${product.name}`;
                     editList.appendChild(editOption);
                 });
-            })
-            .catch(error => console.error("Error fetching products:", error));
+            });
     }
 
     loadProducts();
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     item.classList.add("invoice-item");
                     item.innerHTML = `
                         <span>${data[productCode].name} - ${quantity} x ₹${price} = ₹${total}</span>
-                        <button class="remove-item">&times;</button>
+                        <button class="remove-item">×</button>
                     `;
                     invoiceList.appendChild(item);
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             alert(data.message);
             if (data.status === "success") {
-                setTimeout(loadProducts, 500); // Delay fetch by 500ms
+                loadProducts();
                 document.getElementById("new-product-code").value = "";
                 document.getElementById("new-product-name").value = "";
                 document.getElementById("new-product-price").value = "";
@@ -115,9 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 alert(data.message);
-                if (data.status === "success") {
-                    setTimeout(loadProducts, 500); // Delay fetch by 500ms
-                }
+                if (data.status === "success") loadProducts();
             });
         }
     });
@@ -131,9 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 alert(data.message);
-                if (data.status === "success") {
-                    setTimeout(loadProducts, 500); // Delay fetch by 500ms
-                }
+                if (data.status === "success") loadProducts();
             });
         }
     });

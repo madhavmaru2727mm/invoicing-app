@@ -1,12 +1,4 @@
 {
-    "L100": {
-        "name": "Lace100",
-        "price": 100
-    },
-    "L300": {
-        "name": "lace300",
-        "price": 300
-    },
     "L40": {
         "name": "Lace40",
         "price": 40
@@ -23,8 +15,8 @@
         "name": "Lace60",
         "price": 60
     },
-    "L55": {
-        "name": "Lace55",
-        "price": 55
+    "ABC": {
+        "name": "123",
+        "price": 100
     }
 }

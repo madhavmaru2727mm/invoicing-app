@@ -22,11 +22,11 @@ h1, h3 {
 }
 
 input, button { /* all text input fields & buttons */
-    width: 100%; /* spans across container */
+    width: 95%; /* spans across container */
     padding: 10px; /* makes fields taller */
     margin: 5px 0;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 4px;
     border: 1px solid #ccc;
 }
 
@@ -106,5 +106,3 @@ button:hover { /* change button to dark when hover */
         overflow: hidden !important;
     }
 }
-
-
