@@ -28,7 +28,18 @@
             <input type="number" id="quantity" placeholder="Quantity">
             <button id="add-product">Add to Invoice</button>
 
-            <ul id="invoice-list"></ul>
+            <table id="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-list"></tbody>
+            </table>
             <h2 id="total-amount">Total: ₹0</h2>
             <button id="print-invoice">Print Invoice</button>
         </div>
@@ -76,4 +87,4 @@
 
     <script src="/static/main.js"></script>
 </body>
-</html>
+</html> 

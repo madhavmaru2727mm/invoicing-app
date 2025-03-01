@@ -120,15 +120,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 const product = data[productCode];
                 const total = product.price * quantity;
                 
-                const item = document.createElement("li");
-                item.classList.add("invoice-item");
+                const item = document.createElement("tr");
                 item.innerHTML = `
-                    <span>${product.name} - ${quantity} x ₹${product.price} = ₹${total}</span>
-                    <button class="remove-item">×</button>
+                    <td>${product.name}</td>
+                    <td>${quantity}</td>
+                    <td>₹${product.price}</td>
+                    <td>₹${total}</td>
+                    <td><button class="remove-item">×</button></td>
                 `;
 
                 item.querySelector(".remove-item").addEventListener("click", () => {
-                    invoiceList.removeChild(item);
+                    item.remove();
                     totalAmount -= total;
                     totalAmountText.textContent = `Total: ₹${totalAmount}`;
                 });
@@ -248,10 +250,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Print invoice
     document.getElementById("print-invoice").addEventListener("click", async function () {
+        const rows = invoiceList.innerHTML.replace(/<td><button class="remove-item">×<\/button><\/td>/g, '');
+        
         const invoiceContent = `
             <h1>ABC Store</h1>
             <h3>Invoice</h3>
-            <ul>${invoiceList.innerHTML.replace(/<button class="remove-item">×<\/button>/g, '')}</ul>
+            <table style="width: 100%; margin: 20px 0;">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
             <h2>${totalAmountText.textContent}</h2>
         `;
 
