@@ -31,22 +31,18 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header with Logout and Manage Users options -->
+        <!-- Header with Logout, Manage Users, and Delete Organization options -->
         <div class="header-links">
             <a href="{{ url_for('logout') }}">Logout</a>
             {% if session.role == 'owner' %}
             <a href="{{ url_for('manage_users', org_id=org_id) }}">Manage Users</a>
+            <a href="{{ url_for('delete_org', org_id=org_id) }}">Delete Organization</a>
             {% endif %}
         </div>
         
         <h1>{{ store_name }}</h1>
         
-        <!-- Only show 'Add New User' link if logged in as an owner -->
-        {% if session.role == 'owner' %}
-        <div class="user-links">
-            <a href="{{ url_for('add_user', org_id=org_id) }}">Add New User</a>
-        </div>
-        {% endif %}
+        <!-- Removed 'Add New User' link from home page -->
         
         <!-- Invoice Section -->
         <div class="invoice-section">
@@ -101,8 +97,7 @@
     <input type="hidden" id="org-id" value="{{ org_id }}">
     <input type="hidden" id="user-role" value="{{ session.role }}">
 
-    <!-- Custom Modal -->
-    <div id="custom-modal" class="modal">
+    <div id="custom-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <p id="modal-message"></p>
             <input type="text" id="modal-input" style="display: none;">
@@ -113,7 +108,7 @@
             </div>
         </div>
     </div>
-
+    
     <script src="/static/main.js"></script>
 </body>
 </html>

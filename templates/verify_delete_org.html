@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Organization Deletion</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .container {
+      width: 300px; margin: 100px auto; padding: 20px;
+      border: 1px solid #ccc; border-radius: 10px;
+      background: white; box-shadow: 0 0 10px gray; text-align: center;
+    }
+    input { width: 90%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>OTP Verification for Organization Deletion</h2>
+    <p>An OTP has been sent for deletion of organization {{ org_id }}. (For demo: OTP is {{ otp }})</p>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="POST" action="{{ url_for('delete_org', org_id=org_id) }}">
+      <input type="text" name="otp" placeholder="Enter OTP" required>
+      <button type="submit">Delete Organization</button>
+    </form>
+  </div>
+</body>
+</html>
