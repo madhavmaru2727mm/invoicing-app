@@ -13,6 +13,7 @@ def get_db_connection():
         user="root",
         password="075Amm@129",
         database="invoicing_db"
+        port= 3306
     )
 
 def init_db():
