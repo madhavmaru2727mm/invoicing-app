@@ -12,7 +12,7 @@ def get_db_connection():
         host="localhost",
         user="root",
         password="075Amm@129",
-        database="invoicing_db"
+        database="invoicing_db",
         port= 3306
     )
 
