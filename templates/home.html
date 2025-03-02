@@ -31,9 +31,12 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header with Logout option -->
+        <!-- Header with Logout and Manage Users options -->
         <div class="header-links">
             <a href="{{ url_for('logout') }}">Logout</a>
+            {% if session.role == 'owner' %}
+            <a href="{{ url_for('manage_users', org_id=org_id) }}">Manage Users</a>
+            {% endif %}
         </div>
         
         <h1>{{ store_name }}</h1>

@@ -220,6 +220,34 @@ def delete_product(org_id):
     conn.close()
     return jsonify({"status": "error", "message": "Product not found"}), 404
 
+# New Route: Manage Users (visible only to owners)
+@app.route('/org/<org_id>/manage_users', methods=['GET'])
+def manage_users(org_id):
+    if 'org_id' not in session or session['org_id'] != org_id or session.get('role') != 'owner':
+        return redirect(url_for('login'))
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT username, password, role FROM users WHERE org_id = %s", (org_id,))
+    users = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('manage_users.html', org_id=org_id, users=users)
+
+
+# New Route: Delete User (accessible to owner)
+@app.route('/org/<org_id>/delete_user', methods=['POST'])
+def delete_user(org_id):
+    if 'org_id' not in session or session['org_id'] != org_id or session.get('role') != 'owner':
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+    username = request.form.get("username").strip()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM users WHERE org_id = %s AND username = %s", (org_id, username))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"status": "success", "message": f"User {username} deleted successfully"})
+
 @app.route('/org/<org_id>/add_user', methods=['GET', 'POST'])
 def add_user(org_id):
     if 'org_id' not in session or session['org_id'] != org_id or session.get('role') != 'owner':
