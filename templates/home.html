@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABC Store</title>
+    <title>{{ store_name }}</title>
     <link rel="stylesheet" href="/static/style.css">
     <style>
         .panel {
@@ -14,11 +14,36 @@
             border-radius: 5px;
             background-color: #f9f9f9;
         }
+        .user-links {
+            margin-bottom: 20px;
+        }
+        .header-links {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .header-links a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #008080;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ABC Store</h1>
+        <!-- Header with Logout option -->
+        <div class="header-links">
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+        
+        <h1>{{ store_name }}</h1>
+        
+        <!-- Only show 'Add New User' link if logged in as an owner -->
+        {% if session.role == 'owner' %}
+        <div class="user-links">
+            <a href="{{ url_for('add_user', org_id=org_id) }}">Add New User</a>
+        </div>
+        {% endif %}
         
         <!-- Invoice Section -->
         <div class="invoice-section">
@@ -44,10 +69,9 @@
             <button id="print-invoice">Print Invoice</button>
         </div>
 
-        <!-- Add New Product Button -->
+        <!-- Only show these options for owners -->
+        {% if session.role == 'owner' %}
         <button id="show-add-product">Add New Product</button>
-
-        <!-- Add New Product Section (Panel) -->
         <div id="add-product-panel" class="panel">
             <h3>Add New Product</h3>
             <input type="text" id="new-product-code" placeholder="Product Code">
@@ -58,10 +82,7 @@
             <button id="cancel-add-product">Cancel</button>
         </div>
 
-        <!-- Edit/Delete Product Button -->
         <button id="show-edit-product">Edit/Delete Product</button>
-
-        <!-- Edit/Delete Product Section (Panel) -->
         <div id="edit-product-panel" class="panel">
             <h3>Edit/Delete Product</h3>
             <input type="text" id="search-product" list="edit-list" autocomplete="off" placeholder="Search Product">
@@ -70,21 +91,26 @@
             <button id="delete-product">Delete</button>
             <button id="cancel-edit-product">Cancel</button>
         </div>
+        {% endif %}
     </div>
 
+    <!-- Hidden fields for organization id and user role -->
+    <input type="hidden" id="org-id" value="{{ org_id }}">
+    <input type="hidden" id="user-role" value="{{ session.role }}">
+
     <!-- Custom Modal -->
-<div id="custom-modal" class="modal">
-    <div class="modal-content">
-        <p id="modal-message"></p>
-        <input type="text" id="modal-input" style="display: none;">
-        <div class="modal-buttons">
-            <button id="modal-ok">OK</button>
-            <button id="modal-cancel" style="display: none;">Cancel</button>
-            <button id="modal-print" style="display: none;">Print</button>
+    <div id="custom-modal" class="modal">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+            <input type="text" id="modal-input" style="display: none;">
+            <div class="modal-buttons">
+                <button id="modal-ok">OK</button>
+                <button id="modal-cancel" style="display: none;">Cancel</button>
+                <button id="modal-print" style="display: none;">Print</button>
+            </div>
         </div>
     </div>
-</div>
 
     <script src="/static/main.js"></script>
 </body>
-</html> 
+</html>

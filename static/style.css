@@ -9,12 +9,13 @@ body {
 
 .container {
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     background: white;
-    box-shadow: 0px 0px 10px gray;
-    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 h1, h3 {
@@ -23,11 +24,19 @@ h1, h3 {
 
 input, button {
     width: 95%;
-    padding: 10px;
-    margin: 5px 0;
+    padding: 12px;
+    margin: 8px 0;
     font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #008080;
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(0, 128, 128, 0.5);
 }
 
 button {
@@ -35,26 +44,30 @@ button {
     color: white;
     border: none;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
     background-color: #006666;
+    transform: translateY(-2px);
 }
 
 .remove-item {
     background: none;
     border: none;
-    font-size: 17px;
+    font-size: 20px;
     color: red;
     cursor: pointer;
     padding: 2px;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     text-align: center;
+    transition: 0.2s;
 }
 
 .remove-item:hover {
     color: darkred;
+    transform: scale(1.2);
 }
 
 /* Invoice Table Styles */
@@ -63,19 +76,23 @@ button:hover {
     margin: 20px 0;
     border: 2px solid #000000;
     border-collapse: collapse;
+    background-color: white;
+    animation: slideUp 0.5s ease-out;
 }
 
 #invoice-table th, #invoice-table td {
-    padding: 10px;
+    padding: 12px;
     text-align: left;
     border: 1px solid #000000;
     border-bottom: 1px solid #ddd;
+    font-size: 15px;
 }
 
 #invoice-table th {
-    background-color: #f8f8f8;
+    background-color: #f0f0f0;
     border-bottom: 2px solid #000000;
 }
+
 #invoice-table tr:last-child td {
     border-bottom: 2px solid #000000;
 }
@@ -96,16 +113,17 @@ button:hover {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    animation: fadeIn 0.5s;
 }
 
 .modal-content {
     background: white;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 8px;
     width: 90%;
-    max-width: 400px;
+    max-width: 450px;
     text-align: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .modal-buttons {
@@ -114,10 +132,11 @@ button:hover {
 
 .modal-buttons button {
     margin: 0 10px;
-    padding: 10px 20px;
+    padding: 10px 25px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 #modal-confirm {
@@ -134,6 +153,7 @@ button:hover {
     background-color: #006666;
 }
 
+/* Responsive Styles */
 @media (max-width: 480px) {
     .container {
         width: 95%;
@@ -170,6 +190,7 @@ button:hover {
     .modal-buttons {
         display: none !important;
     }
+    
     table {
         border: 2px solid #000 !important;
         border-collapse: collapse !important;
@@ -187,5 +208,32 @@ button:hover {
 
     tr:last-child td {
         border-bottom: 2px solid #000 !important;
+    }
+    
+    /* Hide the last column (Action) in printed tables */
+    table th:last-child,
+    table td:last-child {
+        display: none !important;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
